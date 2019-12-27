@@ -17,30 +17,41 @@ import org.springframework.stereotype.Component;
  */
 @Component
 public class UserDaoService {
-    
+
     private static List<User> USERS = new ArrayList<>();
-    
+
     static {
         USERS.add(new User(1, "Ciccio", new Date()));
         USERS.add(new User(2, "Pasticcio", new Date()));
         USERS.add(new User(3, "Pasticcione", new Date()));
     }
-    
+
     public List<User> findAll() {
         return USERS;
-    } 
-    
+    }
+
     public User save(User user) {
-        if(user.getId() == null) {
+        if (user.getId() == null) {
             user.setId(USERS.size() + 1);
         }
         USERS.add(user);
         return user;
     }
-    
+
     public Optional<User> findOne(int id) {
         return USERS.stream()
                 .filter(user -> user.getId() == id)
                 .findFirst();
+    }
+
+    public Optional<User> deleteById(int id) {
+
+        Optional<User> userToDelete = USERS.stream()
+                .filter(user -> user.getId() == id)
+                .findFirst();
+        if (userToDelete.isPresent()) {
+            USERS.remove(userToDelete.get());
+        }
+        return userToDelete;
     }
 }
