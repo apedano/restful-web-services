@@ -8,6 +8,7 @@ package it.apedano.webservices.restfulwebservices.user;
 import java.net.URI;
 import java.util.List;
 import java.util.Optional;
+import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -62,7 +63,7 @@ public class UserController {
     }
      */
     @PostMapping("/users")
-    public ResponseEntity<User> createUser(@RequestBody User user) {
+    public ResponseEntity<User> createUser(@Valid @RequestBody User user) {
         User savedUser = userDaoService.save(user);
         URI savedUserUri = ServletUriComponentsBuilder.fromCurrentRequest() // /users
                 .path("/{id}") //append the id part
