@@ -10,6 +10,11 @@ import java.util.List;
 import java.util.Optional;
 import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.hateoas.EntityModel;
+import org.springframework.hateoas.Link;
+import org.springframework.hateoas.server.EntityLinks;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -27,6 +32,9 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 public class UserController {
 
     @Autowired
+    private EntityLinks entityLinks;
+
+    @Autowired
     private UserDaoService userDaoService;
 
     @GetMapping(path = "/users")
@@ -35,12 +43,35 @@ public class UserController {
     }
 
     @GetMapping("/users/{id}")
-    public User retrieveUser(@PathVariable int id) {
+    public EntityModel<User> retrieveUser(@PathVariable int id) throws NoSuchMethodException {
         Optional<User> userOptional = userDaoService.findOne(id);
         if (!userOptional.isPresent()) {
             throw new UserNotFoundException("id:" + id);
         }
-        return userOptional.get();
+        EntityModel<User> entityModel = new EntityModel<>(userOptional.get());
+        //Methods of the WebMvcLinkBuilder class the linkTo takes a method as input to be presented in the
+        //output with the name in the withRel method
+        Link link = linkTo(methodOn(UserController.class).retrieveAllUsers()).withRel("all-users");
+        entityModel.add(link);
+        Link selfLink = linkTo(methodOn(UserController.class).retrieveUser(id)).withSelfRel();
+        entityModel.add(selfLink);
+        /*
+        {
+    "id": 1,
+    "name": "Ciccio",
+    "birthDate": "2020-01-04T12:28:38.050+0000",
+    "_links": {
+        "all-users": {
+            "href": "http://localhost:8080/users"
+        },
+        "self": {
+            "href": "http://localhost:8080/users/1"
+        }
+    }
+}       
+         */
+
+        return entityModel;
 
     }
 
