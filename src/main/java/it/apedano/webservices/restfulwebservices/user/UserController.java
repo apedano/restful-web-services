@@ -37,6 +37,57 @@ public class UserController {
     @Autowired
     private UserDaoService userDaoService;
 
+    /*
+    Content negotiation based on the Accpet request header
+    By simply adding the jackson xml serializer to the pom we are able to give xml as response
+
+    curl --location --request GET 'http://localhost:8080/users' \
+--header 'Accept: application/json' \
+
+    [
+    {
+        "id": 1,
+        "name": "Ciccio",
+        "birthDate": "2020-01-06T08:41:14.019+0000"
+    },
+    {
+        "id": 2,
+        "name": "Pasticcio",
+        "birthDate": "2020-01-06T08:41:14.019+0000"
+    },
+    {
+        "id": 3,
+        "name": "Pasticcione",
+        "birthDate": "2020-01-06T08:41:14.019+0000"
+    }
+]
+
+    curl --location --request GET 'http://localhost:8080/users' \
+--header 'Accept: application/xml' \
+    <List>
+    <item>
+        <id>1</id>
+        <name>Ciccio</name>
+        <birthDate>2020-01-06T08:41:31.534+0000</birthDate>
+    </item>
+    <item>
+        <id>2</id>
+        <name>Pasticcio</name>
+        <birthDate>2020-01-06T08:41:31.534+0000</birthDate>
+    </item>
+    <item>
+        <id>3</id>
+        <name>Pasticcione</name>
+        <birthDate>2020-01-06T08:41:31.534+0000</birthDate>
+    </item>
+</List>
+
+    curl --location --request GET 'http://localhost:8080/users' \
+--header 'Accept: application/ecmascript' \
+
+    Response 406 Not Acceptable
+
+     */
     @GetMapping(path = "/users")
     public List<User> retrieveAllUsers() {
         return userDaoService.findAll();
@@ -68,7 +119,7 @@ public class UserController {
             "href": "http://localhost:8080/users/1"
         }
     }
-}       
+}
          */
 
         return entityModel;
@@ -92,6 +143,17 @@ public class UserController {
         "name": "Alessandro",
         "birthDate": "1980-07-27T11:28:39.363+0000"
     }
+
+    Content negotiation with XML posted data
+    curl --location --request POST 'http://localhost:8080/users' \
+--header 'Accept: application/xml' \
+--header 'Content-Type: application/xml' \
+--data-raw '<item>
+        <name>New User</name>
+        <birthDate>2020-01-06T08:45:35.732+0000</birthDate>
+    </item>'
+
+
      */
     @PostMapping("/users")
     public ResponseEntity<User> createUser(@Valid @RequestBody User user) {
