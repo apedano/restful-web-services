@@ -27,6 +27,22 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
         </dependency>
+        <!-- for basic authentication -->
+        <!--
+        Credentials in application.properties file
+spring.security.user.name=apedano
+spring.security.user.password==password 
+        -->
+<!--        GET 'http://localhost:8080/users/1' \
+'Accept: application/json' \
+'Content-Type: application/json' \
+'Authorization: Basic dXNlcjo3ZTEzMDk1Ny1jM2E3LTRkOWQtOTc5Ny05NDgxODhkMGYwZjE=' (user-user and password the password form the build output)
+-->
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-security</artifactId>
+        </dependency>
         
         <!-- Monitoring facilities -->
         <!-- http://localhost:8080/actuator -->
