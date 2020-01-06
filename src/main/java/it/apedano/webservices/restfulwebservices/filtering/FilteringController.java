@@ -62,8 +62,8 @@ public class FilteringController {
                 new DynamicallyFilteredBean("value11", "value12", "value13"),
                 new DynamicallyFilteredBean("value21", "value22", "value23"));
         MappingJacksonValue mapping = new MappingJacksonValue(list);
-        SimpleBeanPropertyFilter filter = SimpleBeanPropertyFilter.filterOutAllExcept("field1", "field2"); //only field3 remains
-        FilterProvider filters = new SimpleFilterProvider().addFilter("DynamicFilter", filter);
+        SimpleBeanPropertyFilter dynamicFilter = SimpleBeanPropertyFilter.filterOutAllExcept("field1", "field2"); //only field3 remains
+        FilterProvider filters = new SimpleFilterProvider().addFilter("DynamicFilter", dynamicFilter);
         mapping.setFilters(filters);
         return mapping;
 
