@@ -97,7 +97,6 @@ spring.security.user.password==password
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-context</artifactId>
-            <version>5.2.2.RELEASE</version>
             <type>jar</type>
         </dependency>
     </dependencies>
