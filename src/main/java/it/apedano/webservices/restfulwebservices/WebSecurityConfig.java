@@ -73,11 +73,15 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 .authorizeRequests() //Allows restricting access based upon the {@link HttpServletRequest} using
                 //.anyRequest().permitAll() //disable security for requests
+                .antMatchers(HttpMethod.GET, "/h2-console/**").permitAll()
                 .antMatchers(HttpMethod.GET, "/users/**").hasRole("USER")
                 .antMatchers(HttpMethod.POST, "/users").hasRole("ADMIN")
                 .antMatchers(HttpMethod.PUT, "/users/**").hasRole("ADMIN")
                 .antMatchers(HttpMethod.PATCH, "/users/**").hasRole("ADMIN")
                 .antMatchers(HttpMethod.DELETE, "/users/**").hasRole("ADMIN")
+                .antMatchers("/jpa/**").hasRole("USER")
+                .and()
+                .headers().frameOptions().disable() //enables fram requests for h2 console
                 .and()
                 .formLogin().disable();
     }
